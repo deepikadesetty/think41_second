@@ -2,6 +2,7 @@ import os
 
 from dotenv import load_dotenv
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from .database import SessionLocal
 from . import models
 app=FastAPI()
@@ -30,3 +31,19 @@ def get_llm_response(prompt):
         model="mixtral-8x7b-32768"
     )
     return response.choices[0].message.content
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+@app.post("/api/chat")
+async def chat_endpoint(message :dict):
+    user_text=message.get("message")
+    conversation_id=message.get("conversation_id")
+    ai_response={ AI response to: {user_text}"}
+    return{
+        "response":ai_response,
+        "conversation_id":conversation_id or 1
+    }

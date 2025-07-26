@@ -2,6 +2,8 @@ import { useState} from "react";
 import MessageList from "./MessageList";
 import UserInput from "./UserInput";
 import useChatStore from "../store/chatStore";
+import axios from "axios";
+ const API_URL ="http:// localhost:800/api/chat";
 
 export default function chatWindow(){
     const[messages,setMessages]=useState([]);
@@ -18,11 +20,27 @@ export default function chatWindow(){
             setLoading(false);
         }, 500);
     };
+    const sendMessage =async(text) =>{
+        addMessage({ sender: "user" ,text});
+        setLoading(true);
+        try {
+            const res = await axios.post(API_URL, {
+                message: text,
+                conversation_id: null,
+            });
+            addMessage({sender: "ai", text: res.data.response});
+        }
+        catch (err){
+            addMessage({ sender:"ai",text:"Error contacting server"});
+        }finally{
+            setLoading(false);
+        }
+    };
     return (
         <div style  ={{
             display:"flex",
             height:"90vh",
-            width="400px",
+            width:"400px",
             margin:"auto"
         }}>
             <MessageList messages={messages} />
