@@ -1,21 +1,23 @@
 import { useState} from "react";
 import MessageList from "./MessageList";
 import UserInput from "./UserInput";
+import useChatStore from "../store/chatStore";
 
 export default function chatWindow(){
     const[messages,setMessages]=useState([]);
-    const sendMessage=(text) =>{
-        const userMsg={sender :"user",text};
-        setMessages((prev) =>[..prev,userMsg]);
+    const sendMessage=(text) => {
+        const userMsg = {sender: "user", text};
+        addMessages((prev) => [
+    ..
+        prev, userMsg
+    ])
+        ;
+        setLoading(true);
         setTimeout(() => {
-            const aiMsg = {sender: "ai", text: `echo :${text}`};
-            setMessages((prev) => [
-        ..
-            prev, aiMsg
-        ])
-            ;
-        },500);
-        };
+            addMessage({sender: "ai", text: `Echo: ${text}`});
+            setLoading(false);
+        }, 500);
+    };
     return (
         <div style  ={{
             display:"flex",
