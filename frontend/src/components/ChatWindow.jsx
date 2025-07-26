@@ -3,7 +3,7 @@ import MessageList from "./MessageList";
 import UserInput from "./UserInput";
 import useChatStore from "../store/chatStore";
 import axios from "axios";
- const API_URL ="http:// localhost:800/api/chat";
+ const API_URL ="http:// localhost:8000/api/chat";
 
 export default function chatWindow(){
     const[messages,setMessages]=useState([]);
